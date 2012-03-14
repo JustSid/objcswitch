@@ -7,15 +7,14 @@
 //
 
 #import <SenTestingKit/SenTestingKit.h>
-#import <objc/runtime.h>
 #import "NSObject+objcswitch.h"
 
-
-@interface objcswitch_tests : SenTestCase
+@interface ObjCSwitchTests : SenTestCase
 
 @end
 
-@implementation objcswitch_tests
+
+@implementation ObjCSwitchTests
 
 - (void)test_respondsToSelectorBasic
 {
@@ -35,6 +34,7 @@
 {
     STAssertFalse([[@"foo" switch] respondsToSelector:@selector(wrong)], @"bad!");
     STAssertFalse([[@"foo" switch] respondsToSelector:@selector(case::miss::case::default:)], @"bad!");
+    STAssertFalse([[@"foo" switch] respondsToSelector:@selector(case::case::default:default:)], @"bad!");
 }
 
 - (void)testBasicCall_1
@@ -86,8 +86,3 @@
 }
 
 @end
-
-// Only needed to compile objcswitch_tests_build to use Xcode's "Generate Preprocessed File"
-int main()
-{
-}
