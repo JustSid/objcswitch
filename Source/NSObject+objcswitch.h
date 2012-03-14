@@ -17,7 +17,9 @@
 
 #import <Foundation/Foundation.h>
 
-// Return the switch object, which implements the actual case::case:: methods
 @interface NSObject (objcswitch)
+// Return the switch object, which implements the actual case::case:: methods
 - (id)switch;
+// Returns true if the object implements the [hash] method
++ (BOOL)instanceImplementsHash;
 @end

@@ -9,8 +9,9 @@
 /* Begin PBXBuildFile section */
 		E91304A41510CFEB00B335CB /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37A0730514C487BB0094CD27 /* SenTestingKit.framework */; };
 		E91304A61510CFEB00B335CB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E91304A51510CFEB00B335CB /* Cocoa.framework */; };
-		E91304C01510D0A800B335CB /* NSObject+objcswitch.m in Sources */ = {isa = PBXBuildFile; fileRef = E91304BC1510D0A800B335CB /* NSObject+objcswitch.m */; };
 		E91304C21510D0A800B335CB /* ObjCSwitchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E91304BF1510D0A800B335CB /* ObjCSwitchTests.m */; };
+		E91304C61511158700B335CB /* NSObject+objcswitch.m in Sources */ = {isa = PBXBuildFile; fileRef = E91304C51511158700B335CB /* NSObject+objcswitch.m */; };
+		E91304CC1511185200B335CB /* ObjCObjects.m in Sources */ = {isa = PBXBuildFile; fileRef = E91304CB1511185200B335CB /* ObjCObjects.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,10 +23,12 @@
 		E91304A81510CFEB00B335CB /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		E91304A91510CFEB00B335CB /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		E91304AA1510CFEB00B335CB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		E91304BB1510D0A800B335CB /* NSObject+objcswitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+objcswitch.h"; sourceTree = "<group>"; };
-		E91304BC1510D0A800B335CB /* NSObject+objcswitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+objcswitch.m"; sourceTree = "<group>"; };
 		E91304BE1510D0A800B335CB /* ObjCSwitchTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ObjCSwitchTests-Info.plist"; sourceTree = "<group>"; };
 		E91304BF1510D0A800B335CB /* ObjCSwitchTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjCSwitchTests.m; sourceTree = "<group>"; };
+		E91304C41511158700B335CB /* NSObject+objcswitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+objcswitch.h"; sourceTree = "<group>"; };
+		E91304C51511158700B335CB /* NSObject+objcswitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+objcswitch.m"; sourceTree = "<group>"; };
+		E91304CA1511185200B335CB /* ObjCObjects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjCObjects.h; sourceTree = "<group>"; };
+		E91304CB1511185200B335CB /* ObjCObjects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjCObjects.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,7 +48,7 @@
 			isa = PBXGroup;
 			children = (
 				37A0731B14C4CD980094CD27 /* README.md */,
-				E91304BA1510D0A800B335CB /* Source */,
+				E91304C31511158700B335CB /* Source */,
 				E91304BD1510D0A800B335CB /* Unit Tests */,
 				37A072EE14C487580094CD27 /* Frameworks */,
 				37A072EC14C487580094CD27 /* Products */,
@@ -81,22 +84,24 @@
 			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
-		E91304BA1510D0A800B335CB /* Source */ = {
-			isa = PBXGroup;
-			children = (
-				E91304BB1510D0A800B335CB /* NSObject+objcswitch.h */,
-				E91304BC1510D0A800B335CB /* NSObject+objcswitch.m */,
-			);
-			path = Source;
-			sourceTree = "<group>";
-		};
 		E91304BD1510D0A800B335CB /* Unit Tests */ = {
 			isa = PBXGroup;
 			children = (
 				E91304BE1510D0A800B335CB /* ObjCSwitchTests-Info.plist */,
 				E91304BF1510D0A800B335CB /* ObjCSwitchTests.m */,
+				E91304CA1511185200B335CB /* ObjCObjects.h */,
+				E91304CB1511185200B335CB /* ObjCObjects.m */,
 			);
 			path = "Unit Tests";
+			sourceTree = "<group>";
+		};
+		E91304C31511158700B335CB /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				E91304C41511158700B335CB /* NSObject+objcswitch.h */,
+				E91304C51511158700B335CB /* NSObject+objcswitch.m */,
+			);
+			path = Source;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,8 +182,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E91304C01510D0A800B335CB /* NSObject+objcswitch.m in Sources */,
 				E91304C21510D0A800B335CB /* ObjCSwitchTests.m in Sources */,
+				E91304C61511158700B335CB /* NSObject+objcswitch.m in Sources */,
+				E91304CC1511185200B335CB /* ObjCObjects.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

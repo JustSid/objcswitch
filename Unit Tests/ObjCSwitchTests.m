@@ -8,6 +8,7 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 #import "NSObject+objcswitch.h"
+#import "ObjCObjects.h"
 
 @interface ObjCSwitchTests : SenTestCase
 
@@ -36,6 +37,87 @@
     STAssertFalse([[@"foo" switch] respondsToSelector:@selector(case::miss::case::default:)], @"bad!");
     STAssertFalse([[@"foo" switch] respondsToSelector:@selector(case::case::default:default:)], @"bad!");
 }
+
+
+- (void)test_nsobjectAdditions
+{
+    ObjCObjectWithHash *objHash = [[ObjCObjectWithHash alloc] initWithInt:42];
+    ObjCObjectWithoutHash *objNoHash = [[ObjCObjectWithoutHash alloc] initWithInt:42];
+    
+    STAssertTrue([[objHash class] instanceImplementsHash], @"bad!");
+    
+    STAssertFalse([[objNoHash class] instanceImplementsHash], @"bad!");
+    STAssertFalse([objNoHash isEqual:objHash], @"bad!");
+    
+    [objHash release];
+    [objNoHash release];
+}
+
+
+- (void)test_objectWithHash
+{
+    ObjCObjectWithHash *object1 = [[ObjCObjectWithHash alloc] initWithInt:42];
+    ObjCObjectWithHash *object2 = [[ObjCObjectWithHash alloc] initWithInt:42];
+    
+    BOOL __block success = NO;
+    
+    [[object1 switch]
+     case:@"Hello World" :^{success = NO;}
+     case:@"Hello" :^{success = NO;}
+     case:object2 :^{success = YES;}
+     ];
+    
+    STAssertTrue(success, @"bad!");
+    
+    [object1 release];
+    [object2 release];
+}
+
+- (void)test_objectWithoutHash
+{
+    ObjCObjectWithoutHash *object1 = [[ObjCObjectWithoutHash alloc] initWithInt:42];
+    ObjCObjectWithoutHash *object2 = [[ObjCObjectWithoutHash alloc] initWithInt:42];
+    
+    BOOL __block success = NO;
+    
+    [[object1 switch]
+     case:@"Hello World" :^{success = NO;}
+     case:@"Hello" :^{success = NO;}
+     case:object2 :^{success = YES;}
+     ];
+    
+    STAssertTrue(success, @"bad!");
+    
+    [object1 release];
+    [object2 release];
+}
+
+- (void)test_default
+{
+    BOOL __block success = NO;
+    
+    [[@"foo" switch]
+     case:@"bar" :^{success = NO;}
+     case:@"baz" :^{success = NO;}
+     default:^{success = YES;}
+     ];
+    
+    STAssertTrue(success, @"bad!");
+}
+
+- (void)test_noFound
+{
+    BOOL __block success = YES;
+    
+    [[@"foo" switch]
+     case:@"bar" :^{success = NO;}
+     case:@"baz" :^{success = NO;}
+     ];
+    
+    STAssertTrue(success, @"bad!");
+}
+
+
 
 - (void)testBasicCall_1
 {

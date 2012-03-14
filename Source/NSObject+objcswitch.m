@@ -148,47 +148,50 @@ typedef void(^ObjCSwitchBlock)(void);
     NSInteger cases = [self numberOfCasesInSelector:selector defaultIndex:&index];
     NSInteger arguments = (cases * 2) + (index != -1 ? 1 : 0);
     
-    index = index * 2; // case count doesn't include the two arguments that get passed per case, so we have to multiply the index by two
+    index = (index != -1) ? index * 2 : -1; // case count doesn't include the two arguments that get passed per case, so we have to multiply the index by two
     
     
     
-    @autoreleasepool {
-        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithCapacity:cases];
-        for(NSInteger i=0; i<arguments; i++)
-        {
-            if(i == index)
-                continue;
-            
-            id compareTo;
-            
-            [invocation getArgument:&compareTo atIndex:(i + 0) + 2];
-            [dictionary setObject:[NSNumber numberWithInteger:(i + 1) + 2] forKey:compareTo];
-            
-            i ++;
-        }
+    NSUInteger hash = [target hash];
+    BOOL canUseHash = [target->isa instanceImplementsHash];
+    
+    for(NSInteger i=0; i<arguments; i++)
+    {
+        if(i == index)
+            continue;
         
-        
-        NSNumber *targetIndex = [dictionary objectForKey:target];
+        id compareTo;
         ObjCSwitchBlock block;
         
-        if(targetIndex)
+        [invocation getArgument:&compareTo atIndex:i + 2];
+        [invocation getArgument:&block atIndex:i + 3];
+        
+        i ++;
+        
+        
+        if(canUseHash && (hash == [compareTo hash]))
         {
-            [invocation getArgument:&block atIndex:[targetIndex integerValue]];
-            block();
-        }
-        else
-        {
-            // Call default    
-            if(index != -1)
+            if([target isEqual:compareTo])
             {
-                ObjCSwitchBlock block;
-                [invocation getArgument:&block atIndex:index + 2];
-                
                 block();
+                return;
             }
         }
+        else if([target isEqual:compareTo])
+        {
+            block();
+            return;
+        }
+    }
+    
+
+    // Call default    
+    if(index != -1)
+    {
+        ObjCSwitchBlock block;
+        [invocation getArgument:&block atIndex:index + 2];
         
-        [dictionary release];
+        block();
     }
 }
 
@@ -207,6 +210,11 @@ typedef void(^ObjCSwitchBlock)(void);
 
 
 @implementation NSObject (objcswitch)
+
++ (BOOL)instanceImplementsHash
+{
+    return [NSObject instanceMethodForSelector:@selector(hash)] != [self instanceMethodForSelector:@selector(hash)];
+}
 
 - (id)switch
 {
