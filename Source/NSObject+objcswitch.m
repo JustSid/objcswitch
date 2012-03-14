@@ -150,35 +150,45 @@ typedef void(^ObjCSwitchBlock)(void);
     
     index = index * 2; // case count doesn't include the two arguments that get passed per case, so we have to multiply the index by two
     
-    for(NSInteger i=0; i<arguments; i++)
-    {
-        if(i == index)
-            continue;
-        
-        id compareTo;
-        ObjCSwitchBlock block;
-        
-        [invocation getArgument:&compareTo atIndex:(i + 0) + 2];
-        [invocation getArgument:&block atIndex:(i + 1) + 2];
-        
-        i ++;
-        
-        
-        if([target isEqual:compareTo])
+    
+    
+    @autoreleasepool {
+        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithCapacity:cases];
+        for(NSInteger i=0; i<arguments; i++)
         {
-            block();
-            return;
+            if(i == index)
+                continue;
+            
+            id compareTo;
+            
+            [invocation getArgument:&compareTo atIndex:(i + 0) + 2];
+            [dictionary setObject:[NSNumber numberWithInteger:(i + 1) + 2] forKey:compareTo];
+            
+            i ++;
         }
-    }
-    
-    
-    // Call default    
-    if(index != -1)
-    {
-        ObjCSwitchBlock block;
-        [invocation getArgument:&block atIndex:index + 2];
         
-        block();
+        
+        NSNumber *targetIndex = [dictionary objectForKey:target];
+        ObjCSwitchBlock block;
+        
+        if(targetIndex)
+        {
+            [invocation getArgument:&block atIndex:[targetIndex integerValue]];
+            block();
+        }
+        else
+        {
+            // Call default    
+            if(index != -1)
+            {
+                ObjCSwitchBlock block;
+                [invocation getArgument:&block atIndex:index + 2];
+                
+                block();
+            }
+        }
+        
+        [dictionary release];
     }
 }
 
