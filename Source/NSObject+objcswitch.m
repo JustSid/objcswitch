@@ -8,20 +8,6 @@
 
 #import "NSObject+objcswitch.h"
 
-typedef void(^ObjCSwitchBlock)(void);
-
-@interface ObjCSwitch : NSProxy
-{
-@private
-    id target;
-}
-
-- (id)initWithTarget:(id)target;
-
-@end
-
-
-
 @implementation ObjCSwitch
 
 - (NSInteger)numberOfCasesInSelector:(SEL)selector defaultIndex:(NSInteger *)defaultIndex
@@ -216,9 +202,9 @@ typedef void(^ObjCSwitchBlock)(void);
     return [NSObject instanceMethodForSelector:@selector(hash)] != [self instanceMethodForSelector:@selector(hash)];
 }
 
-- (id)switch
+- (ObjCSwitch *)switch
 {
-    return (id)[[[ObjCSwitch alloc] initWithTarget:self] autorelease];
+    return [[[ObjCSwitch alloc] initWithTarget:self] autorelease];
 }
 
 @end
