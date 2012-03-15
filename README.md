@@ -21,7 +21,7 @@ However, you can also use default: and blocks to provide your own comparison. Th
         NSString *evaluteString = evaluateObject;
         NSString *string = object;
         
-        return [evaluteString compare:string options:NSCaseInsensitiveSearch];
+        return ([evaluteString compare:string options:NSCaseInsensitiveSearch] == NSOrderedSame);
     };
     
 	[[@"FoO" switchWithBlock:block]
