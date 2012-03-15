@@ -38,6 +38,22 @@
     STAssertFalse([[@"foo" switch] respondsToSelector:@selector(case::case::default:default:)], @"bad!");
 }
 
+- (void)test_invocation
+{
+    BOOL success = NO;
+    
+    @try {
+        [[@"foo" switch] addObject:@"bar"];
+    }
+    @catch (NSException *exception) {
+        success = YES;
+    }
+    @finally {
+    }
+    
+    
+    STAssertTrue(success, @"bad!");
+}
 
 - (void)test_nsobjectAdditions
 {

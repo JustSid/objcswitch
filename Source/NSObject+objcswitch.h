@@ -32,8 +32,8 @@ typedef BOOL(^ObjCSwitchCompareBlock)(id evaluateObject, id object);
 
 @interface NSObject (objcswitch)
 // Return the switch object, which implements the actual case::case:: methods
-- (ObjCSwitch *)switch;
-- (ObjCSwitch *)switchWithBlock:(ObjCSwitchCompareBlock)block;
+- (id)switch;
+- (id)switchWithBlock:(ObjCSwitchCompareBlock)block;
 // Returns true if the object implements the [hash] method
 + (BOOL)instanceImplementsHash;
 @end

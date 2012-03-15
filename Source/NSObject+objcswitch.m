@@ -125,7 +125,7 @@
     SEL selector = [invocation selector];
     if(![self validSelector:selector])
     {
-        [invocation invokeWithTarget:self];
+        [super forwardInvocation:invocation];
         return;
     }
     
@@ -202,7 +202,7 @@
 
 
 
-- (ObjCSwitch *)switch
+- (id)switch
 {
     BOOL __block canUseHash = [self->isa instanceImplementsHash];
     NSUInteger __block hash = [self hash];
@@ -220,7 +220,7 @@
     }];
 }
 
-- (ObjCSwitch *)switchWithBlock:(ObjCSwitchCompareBlock)block
+- (id)switchWithBlock:(ObjCSwitchCompareBlock)block
 {
     return [[[ObjCSwitch alloc] initWithObject:self andBlock:block] autorelease];
 }
