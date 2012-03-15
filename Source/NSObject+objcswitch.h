@@ -18,14 +18,14 @@
 #import <Foundation/Foundation.h>
 
 typedef void(^ObjCSwitchBlock)(void);
+typedef BOOL(^ObjCSwitchCompareBlock)(id evaluateObject, id object);
 
 @interface ObjCSwitch : NSProxy
 {
 @private
-    id target;
+    id evaluateObject;
+    ObjCSwitchCompareBlock compareBlock;
 }
-
-- (id)initWithTarget:(id)target;
 
 @end
 
@@ -33,10 +33,10 @@ typedef void(^ObjCSwitchBlock)(void);
 @interface NSObject (objcswitch)
 // Return the switch object, which implements the actual case::case:: methods
 - (ObjCSwitch *)switch;
+- (ObjCSwitch *)switchWithBlock:(ObjCSwitchCompareBlock)block;
 // Returns true if the object implements the [hash] method
 + (BOOL)instanceImplementsHash;
 @end
-
 
 
 #define _ObjCSwitch  - (void)case:(id)obj :(ObjCSwitchBlock)block

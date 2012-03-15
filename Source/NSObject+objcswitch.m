@@ -137,10 +137,6 @@
     index = (index != -1) ? index * 2 : -1; // case count doesn't include the two arguments that get passed per case, so we have to multiply the index by two
     
     
-    
-    NSUInteger hash = [target hash];
-    BOOL canUseHash = [target->isa instanceImplementsHash];
-    
     for(NSInteger i=0; i<arguments; i++)
     {
         if(i == index)
@@ -154,16 +150,7 @@
         
         i ++;
         
-        
-        if(canUseHash && (hash == [compareTo hash]))
-        {
-            if([target isEqual:compareTo])
-            {
-                block();
-                return;
-            }
-        }
-        else if([target isEqual:compareTo])
+        if(compareBlock(evaluateObject, compareTo))
         {
             block();
             return;
@@ -183,10 +170,21 @@
 
 
 
-- (id)initWithTarget:(id)ttarget
+
+- (id)initWithObject:(id)object andBlock:(ObjCSwitchCompareBlock)block
 {
-    target = ttarget;
+    evaluateObject = [object retain];
+    compareBlock = Block_copy(block);
+    
     return self;
+}
+
+- (void)dealloc
+{
+    Block_release(compareBlock);
+    [evaluateObject release];
+    
+    [super dealloc];
 }
 
 @end
@@ -202,9 +200,29 @@
     return [NSObject instanceMethodForSelector:@selector(hash)] != [self instanceMethodForSelector:@selector(hash)];
 }
 
+
+
 - (ObjCSwitch *)switch
 {
-    return [[[ObjCSwitch alloc] initWithTarget:self] autorelease];
+    BOOL __block canUseHash = [self->isa instanceImplementsHash];
+    NSUInteger __block hash = [self hash];
+    
+    return [self switchWithBlock:^BOOL(id evaluateObject, id object) {
+        if(canUseHash)
+        {
+            if(hash == [object hash])
+                return [evaluateObject isEqual:object];
+            
+            return NO;
+        }  
+        
+        return [evaluateObject isEqual:object];
+    }];
+}
+
+- (ObjCSwitch *)switchWithBlock:(ObjCSwitchCompareBlock)block
+{
+    return [[[ObjCSwitch alloc] initWithObject:self andBlock:block] autorelease];
 }
 
 @end
